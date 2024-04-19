@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Ann\\MyNewRoad\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|c:\\users\\ann\\mynewroad\\assets\\roadpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|solutionrelative:assets\\roadpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RoadPoints.cs",
+              "DocumentMoniker": "C:\\Users\\Ann\\MyNewRoad\\Assets\\RoadPoints.cs",
+              "RelativeDocumentMoniker": "Assets\\RoadPoints.cs",
+              "ToolTip": "C:\\Users\\Ann\\MyNewRoad\\Assets\\RoadPoints.cs",
+              "RelativeToolTip": "Assets\\RoadPoints.cs",
+              "ViewState": "AQIAAL0BAAAAAAAAAAAwwNcBAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-05T08:09:14.504Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
