@@ -5,34 +5,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.SocialPlatforms;
+using static SideRoad;
+using System.Reflection;
 
 public class RoadPoints : MonoBehaviour
 {
     static string Path = "Resources/XYZpoints.txt";
     public GameObject pointPrefab;
 
-    static string[] lines = File.ReadAllLines(Path);
-    [SerializeField]Vector3[] pointCoordinates = new Vector3[lines.Length];
+    public static string[] lines = File.ReadAllLines(Path);
+    [SerializeField]Vector3[] pointCoordinates = new Vector3[lines.Length];//ось дороги
 
     ///*[SerializeField] */Vector3[] points = new Vector3[4]; // Указываем размер массива
 
-    Vector3[] nAR = new Vector3[lines.Length];
-    Vector3[] nBR = new Vector3[lines.Length];
-    Vector3[] nAL = new Vector3[lines.Length];
-    Vector3[] nBL = new Vector3[lines.Length];
+    //public static event System.Action OnRoadMeshInitialized;
+    //Points for road
+    public Vector3[] nARightEquidistantRoad = new Vector3[lines.Length];
+    public Vector3[] nBRightEquidistantRoad = new Vector3[lines.Length];
+    public Vector3[] nALeftEquidistantRoad = new Vector3[lines.Length];
+    public Vector3[] nBLeftEquidistantRoad = new Vector3[lines.Length];
 
-    Vector3[] RML = new Vector3[1];
-    Vector3[] RMR = new Vector3[1];
+    //Mesh for road
+    public Vector3[] RoadMeshL = new Vector3[1];//левая сторона дороги
+    public Vector3[] RoadMeshR = new Vector3[1];//правая сторона дороги
 
-    /*public void GetCoordTEST()
-    {
-        points[0] = new Vector3(0, 0, 1);
-        points[1] = new Vector3(1, 1, 1);
-        points[2] = new Vector3(3, 1, 1);
-        points[3] = new Vector3(4, 1, 2);
-    }*/
 
-    public void GetCoord()
+
+    //Mesh for roadside
+    private Vector3[] RoadsideMeshL = new Vector3[1];//левая сторона обочины
+    private Vector3[] RoadsideMeshR = new Vector3[1];//правая сторона обочины
+    //ОБОЧИНА
+
+    private Vector3[] nARightEquidistantRoadside = new Vector3[lines.Length];
+    private Vector3[] nBRightEquidistantRoadside = new Vector3[lines.Length];
+    private Vector3[] nALeftEquidistantRoadside = new Vector3[lines.Length];
+    private Vector3[] nBLeftEquidistantRoadside = new Vector3[lines.Length];
+
+
+
+    private Mesh[] roadMeshes;
+
+    private void GetCoord()
     {
         string[] coordinates = new string[3];
         float[] start = new float[3];
@@ -69,76 +82,8 @@ public class RoadPoints : MonoBehaviour
         }
     }//координаты оси дороги
 
-
-    public (Vector3[], Vector3[]) CalcRightEquidistant(Vector3[] pointCoord)//переделать с параметрами
+    public (Vector3[], Vector3[]) CalcRightRoadEquidistant(Vector3[] pointCoord, float widht, float high)//переделать с параметрами
     {
-        /*Vector3[] avec = new Vector3[lines.Length];
-        double[] a = new double[lines.Length];
-        for (int i = 1; i < lines.Length; i++)
-        {
-            avec[i] = new Vector3(pointCoordinates[i].x - pointCoordinates[i - 1].x, pointCoordinates[i].y - pointCoordinates[i - 1].y, pointCoordinates[i].z - pointCoordinates[i - 1].z);
-            //Debug.Log(avec);
-            a[i] = Math.Sqrt(Math.Pow((double)avec[i].x, 2) + Math.Pow((double)avec[i].y, 2) + Math.Pow((double)avec[i].z, 2));
-        }
-        for (int i = 1; i < lines.Length; i++)
-        {
-            Vector3 nvecR = new Vector3((float)(avec[i].z / a[i]), (float)(avec[i].y / a[i]), -(float)(avec[i].x / a[i]));
-            Vector3 nvecL = new Vector3(-(float)(avec[i].z / a[i]), (float)(avec[i].y / a[i]), (float)(avec[i].x / a[i]));
-
-            Vector3 vecAR = new Vector3(pointCoordinates[i - 1].x + 2 * nvecR.x, pointCoordinates[i - 1].y, pointCoordinates[i - 1].z - 2);
-            Vector3 vecBR = new Vector3(pointCoordinates[i].x + 2 * nvecR.x, pointCoordinates[i].y, pointCoordinates[i].z - 2);
-
-            Vector3 vecAL = new Vector3(pointCoordinates[i - 1].x + 2 * nvecL.x, pointCoordinates[i - 1].y, pointCoordinates[i - 1].z + 2);
-            Vector3 vecBL = new Vector3(pointCoordinates[i].x + 2 * nvecL.x, pointCoordinates[i].y, pointCoordinates[i].z + 2);
-            nAR[i - 1] = vecAR;
-            nAL[i - 1] = vecAL;
-            nBR[i - 1] = vecBR;
-            nBL[i - 1] = vecBL;
-        }*/
-
-        /*for (int i = 1; i < lines.Length; i++)
-        {
-            Vector3 avec = new Vector3(pointCoordinates[i].x - pointCoordinates[i - 1].x, pointCoordinates[i].y - pointCoordinates[i - 1].y, pointCoordinates[i].z - pointCoordinates[i - 1].z);
-            //Debug.Log(avec);
-            double a = Math.Sqrt(Math.Pow((double)avec.x, 2) + Math.Pow((double)avec.y, 2) + Math.Pow((double)avec.z, 2));
-
-
-            Vector3 nvecR = new Vector3((float)(avec.z / a), (float)(avec.y / a), -(float)(avec.x / a));
-            Vector3 nvecL = new Vector3(-(float)(avec.z / a), (float)(avec.y / a), (float)(avec.x / a));
-
-            Vector3 vecAR = new Vector3(pointCoordinates[i - 1].x + 2 * nvecR.x, pointCoordinates[i - 1].y, pointCoordinates[i - 1].z - 2);
-            Vector3 vecBR = new Vector3(pointCoordinates[i].x + 2 * nvecR.x, pointCoordinates[i].y, pointCoordinates[i].z - 2);
-
-            Vector3 vecAL = new Vector3(pointCoordinates[i - 1].x + 2 * nvecL.x, pointCoordinates[i - 1].y, pointCoordinates[i - 1].z + 2);
-            Vector3 vecBL = new Vector3(pointCoordinates[i].x + 2 * nvecL.x, pointCoordinates[i].y, pointCoordinates[i].z + 2);
-            nAR[i - 1] = vecAR;
-            nAL[i - 1] = vecAL;
-            nBR[i - 1] = vecBR;
-            nBL[i - 1] = vecBL;
-        }*/
-
-        /*for (int i = 1; i < lines.Length; i++)
-        {
-            Vector3 avec = new Vector3(pointCoordinates[i].x - pointCoordinates[i - 1].x, pointCoordinates[i].y - pointCoordinates[i - 1].y, pointCoordinates[i].z - pointCoordinates[i - 1].z);
-            //Debug.Log(avec);
-            double a = Math.Sqrt(Math.Pow(avec.x, 2) + Math.Pow(avec.y, 2) + Math.Pow(avec.z, 2));
-
-
-            Vector3 nvecR = new Vector3((float)(avec.z / a), (float)(avec.y / a), -(float)(avec.x / a));
-            Vector3 nvecL = new Vector3(-(float)(avec.z / a), (float)(avec.y / a), (float)(avec.x / a));
-
-            Vector3 vecAR = new Vector3(pointCoordinates[i - 1].x + 2 * nvecR.x, (pointCoordinates[i - 1].y + pointCoordinates[i].y) / 2, pointCoordinates[i - 1].z - 2);
-            Vector3 vecBR = new Vector3(pointCoordinates[i].x + 2 * nvecR.x, (pointCoordinates[i - 1].y + pointCoordinates[i].y) / 2, pointCoordinates[i].z - 2);
-
-            Vector3 vecAL = new Vector3(pointCoordinates[i - 1].x + 2 * nvecL.x, (pointCoordinates[i - 1].y + pointCoordinates[i].y) / 2, pointCoordinates[i - 1].z + 2);
-            Vector3 vecBL = new Vector3(pointCoordinates[i].x + 2 * nvecL.x, (pointCoordinates[i - 1].y + pointCoordinates[i].y) / 2, pointCoordinates[i].z + 2);
-            nAR[i - 1] = vecAR;
-            nAL[i - 1] = vecAL;
-            nBR[i - 1] = vecBR;
-            nBL[i - 1] = vecBL;
-        }*/
-
-
         Vector3[] nARight = new Vector3[pointCoord.Length];
         Vector3[] nBRight = new Vector3[pointCoord.Length];
 
@@ -151,9 +96,10 @@ public class RoadPoints : MonoBehaviour
 
             Vector3 nvecR = new Vector3((float)(avec.z / a), (float)(avec.y / a), -(float)(avec.x / a));
 
-            //3.5 это ширина полосы дороги
-            Vector3 vecAR = new Vector3(pointCoord[i - 1].x + (float)3.5 * nvecR.x, pointCoord[i - 1].y, pointCoord[i - 1].z + (float)3.5 * nvecR.z);
-            Vector3 vecBR = new Vector3(pointCoord[i].x + (float)3.5 * nvecR.x, pointCoord[i].y, pointCoord[i].z + (float)3.5 * nvecR.z);
+            //widht это ширина полосы дороги
+            //high это высота у дороги
+            Vector3 vecAR = new Vector3(pointCoord[i - 1].x + widht * nvecR.x, pointCoord[i - 1].y + nvecR.y * high, pointCoord[i - 1].z + widht * nvecR.z);
+            Vector3 vecBR = new Vector3(pointCoord[i].x + widht * nvecR.x, pointCoord[i].y + nvecR.y * high, pointCoord[i].z + widht * nvecR.z);
 
             nARight[i - 1] = vecAR;
             nBRight[i - 1] = vecBR;
@@ -163,7 +109,7 @@ public class RoadPoints : MonoBehaviour
         return (nARight, nBRight);
     }
 
-    public (Vector3[], Vector3[]) CalcLeftEquidistant(Vector3[] pointCoord)//переделать с параметрами
+    public (Vector3[], Vector3[]) CalcLeftRoadEquidistant(Vector3[] pointCoord, float widht, float high)//переделать с параметрами
     {
         Vector3[] nALeft = new Vector3[pointCoord.Length];
         Vector3[] nBLeft = new Vector3[pointCoord.Length];
@@ -175,21 +121,19 @@ public class RoadPoints : MonoBehaviour
 
             Vector3 nvecL = new Vector3(-(float)(avec.z / a), (float)(avec.y / a), (float)(avec.x / a));
 
-            //3.5 это ширина полосы дороги
-            Vector3 vecAL = new Vector3(pointCoord[i - 1].x + (float)3.5 * nvecL.x, pointCoord[i - 1].y, pointCoord[i - 1].z + (float)3.5 * nvecL.z);
-            Vector3 vecBL = new Vector3(pointCoord[i].x + (float)3.5 * nvecL.x, pointCoord[i].y, pointCoord[i].z + (float)3.5 * nvecL.z);
+            //widht это ширина полосы дороги
+            //high это высота у дороги
+            Vector3 vecAL = new Vector3(pointCoord[i - 1].x + widht * nvecL.x, pointCoord[i - 1].y + nvecL.y * high, pointCoord[i - 1].z + widht * nvecL.z);
+            Vector3 vecBL = new Vector3(pointCoord[i].x + widht * nvecL.x, pointCoord[i].y + nvecL.y * high, pointCoord[i].z + widht * nvecL.z);
 
             nALeft[i - 1] = vecAL;
             nBLeft[i - 1] = vecBL;
-
-            
+           
         }
         return (nALeft, nBLeft);
 
     }
-
-
-    public Vector3[] MeshNearPoints(Vector3[] nA, Vector3[] nB, int count, Vector3[] mainLine)
+    public Vector3[] MeshNearPoints(Vector3[] nA, Vector3[] nB, int count, Vector3[] mainLine, float width)
     {
 
         Vector3[] M = new Vector3[count];
@@ -199,8 +143,7 @@ public class RoadPoints : MonoBehaviour
         {
             if (i == 0)
             {
-                M[i] = nA[i];
-                
+                M[i] = nA[i]; 
             }
             else
             {
@@ -212,7 +155,6 @@ public class RoadPoints : MonoBehaviour
                 {
                     if (nA[i].x < nB[i - 1].x) //по иксу, т.к. х это путь вперёд(сгиб внутрь)
                     {
-                        
                         Vector3 mid;
                         float midx, midy, midz;
 
@@ -224,16 +166,14 @@ public class RoadPoints : MonoBehaviour
 
                         Vector3 avec = new Vector3(mid.x - mainLine[i].x, mid.y - mainLine[i].y, mid.z - mainLine[i].z);//разница между сереждиной и осью
                         Vector3 normalizedDirection = avec.normalized;
-                        Vector3 C = mainLine[i] + normalizedDirection * (float)3.5;
+                        Vector3 C = mainLine[i] + normalizedDirection * width;
 
-                        M[i] = C;
-                        
+                        M[i] = C; 
                     }
                     else
                     {
                         if (nA[i].x > nB[i - 1].x)//по иксу, т.к. х это путь вперёд(сгиб наружу)
                         {
-                            
                             Vector3 mid;
                             float midx, midy, midz;
 
@@ -245,18 +185,15 @@ public class RoadPoints : MonoBehaviour
 
                             Vector3 avec = new Vector3(mid.x - mainLine[i].x, mid.y - mainLine[i].y, mid.z - mainLine[i].z);//разница между сереждиной и осью
                             Vector3 normalizedDirection = avec.normalized;
-                            Vector3 C = mainLine[i] + normalizedDirection * (float)3.5;
+                            Vector3 C = mainLine[i] + normalizedDirection * width;
 
-                            M[i] = C;
-                           
-                            
+                            M[i] = C;       
                         }
                         else
                         {
                             if (nA[i].x == nB[i - 1].x)//одна и та же точка
                             {
                                 M[i] = nA[i];
-                                
                             }
                         }
                     }
@@ -267,82 +204,343 @@ public class RoadPoints : MonoBehaviour
         return M;
     }
 
-    public void MeshCreate()//creating mesh
+    private Mesh RoadMeshCreate(int index)//0, 1, 2
     {
         Mesh mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-        mesh.name = "Road";
+        int meshCount;
+        Vector3[] MeshNearPoints;
+        int[] triangle;
 
-        int meshCount = RMR.Length + RML.Length + pointCoordinates.Length;
-        Vector3[] MeshNearPoints = new Vector3[meshCount];
-
-        for (int i = 0; i < RMR.Length; i++)
+        if (index == 0)
         {
-            MeshNearPoints[i] = RMR[i];
-        }
+            meshCount = RoadMeshR.Length + RoadMeshL.Length + pointCoordinates.Length;
+            MeshNearPoints = new Vector3[meshCount];
 
-        for (int i = 0; i < pointCoordinates.Length; i++)
-        {
-            MeshNearPoints[i + RMR.Length] = pointCoordinates[i];
-        }
-
-        for (int i = 0; i < RML.Length; i++)
-        {
-            MeshNearPoints[i + RMR.Length + pointCoordinates.Length] = RML[i];
-        }
-
-        int[] triangle = new int[2 * (RMR.Length - 1) * 6];//количество квадов
-        for (int ti = 0, vi = 0, i = 0; i < 2; i++, vi++)
-        {
-            for (int k = 0; k < RMR.Length - 1; k++, ti+=6, vi++)
+            for (int i = 0; i < RoadMeshR.Length; i++)
             {
-                triangle[ti] = vi;
-                triangle[ti + 1] = vi + RMR.Length;
-                triangle[ti + 2] = vi + 1;
-                triangle[ti + 3] = vi + RMR.Length;
-                triangle[ti + 4] = vi + RMR.Length + 1;
-                triangle[ti + 5] = vi + 1;
+                MeshNearPoints[i] = RoadMeshR[i];
+            }
+
+            for (int i = 0; i < pointCoordinates.Length; i++)
+            {
+                MeshNearPoints[i + RoadMeshR.Length] = pointCoordinates[i];
+            }
+
+            for (int i = 0; i < RoadMeshL.Length; i++)
+            {
+                MeshNearPoints[i + RoadMeshR.Length + pointCoordinates.Length] = RoadMeshL[i];
+            }
+
+            triangle = new int[2 * (RoadMeshR.Length - 1) * 6];//количество квадов
+            for (int ti = 0, vi = 0, i = 0; i < 2; i++, vi++)
+            {
+                for (int k = 0; k < RoadMeshR.Length - 1; k++, ti += 6, vi++)
+                {
+                    triangle[ti] = vi;
+                    triangle[ti + 1] = vi + RoadMeshR.Length;
+                    triangle[ti + 2] = vi + 1;
+                    triangle[ti + 3] = vi + RoadMeshR.Length;
+                    triangle[ti + 4] = vi + RoadMeshR.Length + 1;
+                    triangle[ti + 5] = vi + 1;
+                }
+            }
+
+            mesh.vertices = MeshNearPoints;
+            mesh.triangles = triangle;
+            mesh.RecalculateNormals();
+        }
+        else
+            if (index == 1)
+        {
+            meshCount = RoadsideMeshL.Length + RoadMeshL.Length;
+            MeshNearPoints = new Vector3[meshCount];
+            Debug.Log(RoadsideMeshL.Length);
+            Debug.Log(RoadMeshL.Length);
+
+
+
+            for (int i = 0; i < RoadMeshL.Length; i++)
+            {
+                MeshNearPoints[i] = RoadMeshL[i];
+            }
+
+            for (int i = 0; i < RoadsideMeshL.Length; i++)
+            {
+                MeshNearPoints[i + RoadMeshL.Length] = RoadsideMeshL[i];
+            }
+
+            triangle = new int[1 * (RoadMeshL.Length - 1) * 6];//количество квадов !!!!//1 или 2 это количество строк(то есть либо 2 полосы дороги либо 1
+            for (int ti = 0, vi = 0, i = 0; i < 1; i++, vi++)
+            {
+                for (int k = 0; k < RoadMeshL.Length - 1; k++, ti += 6, vi++)
+                {
+                    triangle[ti] = vi;
+                    triangle[ti + 1] = vi + RoadMeshL.Length;
+                    triangle[ti + 2] = vi + 1;
+                    triangle[ti + 3] = vi + RoadMeshL.Length;
+                    triangle[ti + 4] = vi + RoadMeshL.Length + 1;
+                    triangle[ti + 5] = vi + 1;
+                }
+            }
+            mesh.vertices = MeshNearPoints;
+            mesh.triangles = triangle;
+            mesh.RecalculateNormals();
+        }
+        else
+        if (index == 2)
+        {
+            meshCount = RoadsideMeshR.Length + RoadMeshR.Length;
+            MeshNearPoints = new Vector3[meshCount];
+            Debug.Log(RoadsideMeshR.Length);
+            Debug.Log(RoadMeshR.Length);
+
+            //для стороны справа от сои дороги приходится идти от обратного, от точек только что найдённых эквидистантов до точек старых(дороги) т.к. построение треугольников по вершинам происходит справа на лево
+
+            for (int i = 0; i < RoadsideMeshR.Length; i++)
+            {
+                MeshNearPoints[i] = RoadsideMeshR[i];
+            }
+
+            for (int i = 0; i < RoadMeshR.Length; i++)
+            {
+                MeshNearPoints[i + RoadsideMeshR.Length] = RoadMeshR[i];
+            }
+
+            triangle = new int[1 * (RoadMeshR.Length - 1) * 6];//количество квадов !!!!//1 или 2 это количество строк(то есть либо 2 полосы дороги либо 1
+            for (int ti = 0, vi = 0, i = 0; i < 1; i++, vi++)
+            {
+                for (int k = 0; k < RoadMeshR.Length - 1; k++, ti += 6, vi++)
+                {
+                    triangle[ti] = vi;
+                    triangle[ti + 1] = vi + RoadMeshR.Length;
+                    triangle[ti + 2] = vi + 1;
+                    triangle[ti + 3] = vi + RoadMeshR.Length;
+                    triangle[ti + 4] = vi + RoadMeshR.Length + 1;
+                    triangle[ti + 5] = vi + 1;
+                }
+            }
+
+            mesh.vertices = MeshNearPoints;
+            mesh.triangles = triangle;
+            mesh.RecalculateNormals();
+        }
+            return mesh;
+    }
+
+    private void AssignMeshesToObjects(int index)//0, 1, 2
+    {
+        // Присваивание мешей каждому найденному объекту
+        if (index == 0)
+        {
+            GameObject roadObject = GameObject.Find("Road");
+
+            MeshFilter meshFilter = roadObject.GetComponent<MeshFilter>();
+            //MeshRenderer meshRenderer = roadObject.GetComponent<MeshRenderer>();
+
+            //int SideRoadL;
+            if (meshFilter != null)
+            {
+                meshFilter.mesh = roadMeshes[index]; // Присваивание меша
+            }
+            else
+            {
+                Debug.LogWarning("MeshFilter component not found on RoadObject.");
+            }
+        }
+        else
+            if (index == 1)
+        {
+            GameObject roadObject = GameObject.Find("SideRoadL");
+            MeshFilter meshFilter = roadObject.GetComponent<MeshFilter>();
+            //MeshRenderer meshRenderer = roadObject.GetComponent<MeshRenderer>();
+
+            //int SideRoadL;
+            if (meshFilter != null)
+            {
+                meshFilter.mesh = roadMeshes[index]; // Присваивание меша
+            }
+            else
+            {
+                Debug.LogWarning("MeshFilter component not found on RoadObject.");
+            }
+        }
+        else
+            if (index == 2)
+        {
+            GameObject roadObject = GameObject.Find("SideRoadR");
+            MeshFilter meshFilter = roadObject.GetComponent<MeshFilter>();
+            MeshRenderer meshRenderer = roadObject.GetComponent<MeshRenderer>();
+
+            if (meshFilter != null)
+            {
+                meshFilter.mesh = roadMeshes[index]; // Присваивание меша
+            }
+            else
+            {
+                Debug.LogWarning("MeshFilter component not found on RoadObject.");
             }
         }
 
-        mesh.RecalculateNormals();  
-        mesh.vertices = MeshNearPoints;
-        mesh.triangles = triangle;
 
-        
     }
 
-    /*public Vector3 CalcIntersection(Vector3 st1, Vector3 end1, Vector3 st2, Vector3 end2)
-    {
-        float a1, a2, b1, b2, c1, c2, t1, t2, del;
+    //public void RoatMeshCreate()//creating mesh
+    //{
 
-        a1 = end1.z - st1.z;
-        b1 = end1.x - st1.x;
-        c1 = end1.y - st1.y;
+    //    //МЕШ ДЛЯ ДОРОГИ
+    //    Mesh Roadmesh = new Mesh();
+    //    GetComponent<MeshFilter>().mesh = Roadmesh;
+    //    Roadmesh.name = "Road";
 
-        
+    //    int meshCount = RoadMeshR.Length + RoadMeshL.Length + pointCoordinates.Length;
+    //    Vector3[] MeshNearPoints = new Vector3[meshCount];
+
+    //    for (int i = 0; i < RoadMeshR.Length; i++)
+    //    {
+    //        MeshNearPoints[i] = RoadMeshR[i];
+    //    }
+
+    //    for (int i = 0; i < pointCoordinates.Length; i++)
+    //    {
+    //        MeshNearPoints[i + RoadMeshR.Length] = pointCoordinates[i];
+    //    }
+
+    //    for (int i = 0; i < RoadMeshL.Length; i++)
+    //    {
+    //        MeshNearPoints[i + RoadMeshR.Length + pointCoordinates.Length] = RoadMeshL[i];
+    //    }
+
+    //    int[] triangle = new int[2 * (RoadMeshR.Length - 1) * 6];//количество квадов
+    //    for (int ti = 0, vi = 0, i = 0; i < 2; i++, vi++)
+    //    {
+    //        for (int k = 0; k < RoadMeshR.Length - 1; k++, ti+=6, vi++)
+    //        {
+    //            triangle[ti] = vi;
+    //            triangle[ti + 1] = vi + RoadMeshR.Length;
+    //            triangle[ti + 2] = vi + 1;
+    //            triangle[ti + 3] = vi + RoadMeshR.Length;
+    //            triangle[ti + 4] = vi + RoadMeshR.Length + 1;
+    //            triangle[ti + 5] = vi + 1;
+    //        }
+    //    }
+
+    //    Roadmesh.vertices = MeshNearPoints;
+    //    Roadmesh.triangles = triangle;
+    //    Roadmesh.RecalculateNormals();
+
+    //    //CombineInstance[] combine = new CombineInstance[2]; // Создаем массив CombineInstance для объединения двух мешей
+    //    //combine[0].mesh = Roadmesh; // Устанавливаем первый меш в массиве как меш дороги
+    //    //combine[1].mesh = Roadsidemesh; // Устанавливаем второй меш в массиве как новый меш
+
+    //    //Matrix4x4 matrix = transform.worldToLocalMatrix; // Получаем матрицу преобразования
+    //    //combine[1].transform = matrix; // Применяем матрицу преобразования ко второму мешу
+
+    //    //Mesh combinedMesh = new Mesh();
+
+    //    //combinedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
+    //    //GetComponent<MeshFilter>().mesh = combinedMesh;
+    //    //combinedMesh.name = "RoadcombinedMesh";
+
+    //    //combinedMesh.CombineMeshes(combine); // Объединяем меши
+    //}
+
+    //public void RoadsideLeftMeshCreate()//creating mesh
+    //{
+    //    Mesh Roadsidemesh = new Mesh();
+    //    GetComponent<MeshFilter>().mesh = Roadsidemesh;
+    //    Roadsidemesh.name = "Roadside";
+
+    //    int meshCount = RoadsideMeshL.Length + RoadMeshL.Length;
+    //    Vector3[] MeshNearPoints = new Vector3[meshCount];
+
+    //    for (int i = 0; i < RoadMeshL.Length; i++)
+    //    {
+    //        MeshNearPoints[i] = RoadMeshL[i];
+    //    }
+
+    //    for (int i = 0; i < RoadsideMeshL.Length; i++)
+    //    {
+    //        MeshNearPoints[i + RoadMeshL.Length] = RoadsideMeshL[i];
+    //    }
+
+    //    int[] triangle = new int[2 * (RoadMeshL.Length - 1) * 6];//количество квадов
+    //    for (int ti = 0, vi = 0, i = 0; i < 2; i++, vi++)
+    //    {
+    //        for (int k = 0; k < RoadMeshL.Length - 1; k++, ti += 6, vi++)
+    //        {
+    //            triangle[ti] = vi;
+    //            triangle[ti + 1] = vi + RoadMeshL.Length;
+    //            triangle[ti + 2] = vi + 1;
+    //            triangle[ti + 3] = vi + RoadMeshL.Length;
+    //            triangle[ti + 4] = vi + RoadMeshL.Length + 1;
+    //            triangle[ti + 5] = vi + 1;
+    //        }
+    //    }
+
+    //    Roadsidemesh.vertices = MeshNearPoints;
+    //    Roadsidemesh.triangles = triangle;
+    //    Roadsidemesh.RecalculateNormals();
+
+    //}
 
 
-        a2 = end2.z - st2.z;
-        b2 = end2.x - st2.x;
-        c2 = end2.y - st2.y;
-        
-        del = a1 * b2 - a2 * b1;
 
-        t1= (st2.x - st1.x) * a2 - (st2.z - st1.z) * b2;
-        t2 = (st2.x - st1.x) * a1 - (st2.z - st1.z) * b1; ;
+    //public void RoadSideMeshCreate()//creating mesh
+    //{
+    //    //МЕШ ДЛЯ ОБОЧИНЫ ЛЕВОЙ
 
-       
+    //    Mesh Roadsidemesh = new Mesh();
+    //    GetComponent<MeshFilter>().mesh = Roadsidemesh;
+    //    Roadsidemesh.name = "SideRoad";
 
-        float x1, y1, z1;
+    //    int meshCount1 = RoadsideMeshL.Length + RoadMeshL.Length;
 
-        x1 = (b1 * d2 - b2 * d1) / det;
-        z1 = (a2 * d1 - a1 * d2) / det;
-        y1= (st1.y + c1 * (x1 - st1.x)) / a1;
+    //    Debug.Log(RoadsideMeshL.Length);
+    //    Debug.Log(RoadMeshL.Length);
 
-        Vector3 Inter= new Vector3(x1, y1, z1);
-        return Inter;
-    }*/
+    //    Vector3[] MeshNearPoints1 = new Vector3[meshCount1];
+
+    //    for (int i = 0; i < RoadMeshL.Length; i++)
+    //    {
+    //        MeshNearPoints1[i] = RoadMeshL[i];
+    //    }
+
+    //    for (int i = 0; i < RoadsideMeshL.Length; i++)
+    //    {
+    //        MeshNearPoints1[i + RoadMeshL.Length] = RoadsideMeshL[i];
+    //    }
+
+    //    int[] triangle1 = new int[1 * (RoadMeshL.Length - 1) * 6];//количество квадов !!!!//1 или 2 это количество строк(то есть либо 2 полосы дороги либо 1
+    //    for (int ti = 0, vi = 0, i = 0; i < 1; i++, vi++)
+    //    {
+    //        for (int k = 0; k < RoadMeshL.Length - 1; k++, ti += 6, vi++)
+    //        {
+    //            triangle1[ti] = vi;
+    //            triangle1[ti + 1] = vi + RoadMeshL.Length;
+    //            triangle1[ti + 2] = vi + 1;
+    //            triangle1[ti + 3] = vi + RoadMeshL.Length;
+    //            triangle1[ti + 4] = vi + RoadMeshL.Length + 1;
+    //            triangle1[ti + 5] = vi + 1;
+    //        }
+    //    }
+    //    Roadsidemesh.vertices = MeshNearPoints1;
+    //    Roadsidemesh.triangles = triangle1;
+    //    Roadsidemesh.RecalculateNormals();
+    //    // Объединяем меши
+
+    //}
+    //private void OnDrawGizmos()
+    //{
+    //    //ЭКВИДИСТАНТЫ
+    //    Gizmos.color = Color.white;
+    //    for (int i = 1; i < roadPoints.RoadMeshL.Length; i++)
+    //    {
+
+    //        Gizmos.DrawLine(nARightEquidistantRoadside[i - 1], nBRightEquidistantRoadside[i - 1]);//right
+    //        Gizmos.DrawLine(nALeftEquidistantRoadside[i - 1], nBLeftEquidistantRoadside[i - 1]);//left
+    //    }
+    //}
 
     private void OnDrawGizmos()
     {
@@ -350,50 +548,18 @@ public class RoadPoints : MonoBehaviour
         //Gizmos.color = Color.yellow;
         //for (int i = 0; i < pointCoordinates.Length; i++)
         //{
-            
+
         //    Gizmos.DrawSphere(pointCoordinates[i], 0.05f);
         //}
-        
+
         //ось дороги
-        Gizmos.color = Color.white;
-        for (int i = 1; i < pointCoordinates.Length; i++)
-        {
-            
-            Gizmos.DrawLine(pointCoordinates[i-1], pointCoordinates[i]);
-        }
+        //Gizmos.color = Color.white;
+        //for (int i = 1; i < pointCoordinates.Length; i++)
+        //{
 
-        /*тест
-        for (int i = 0; i < 4; i++)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(points[i], 0.05f);
+        //    Gizmos.DrawLine(pointCoordinates[i - 1], pointCoordinates[i]);
+        //}
 
-        }
-        for (int i = 1; i < 4; i++)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(points[i - 1], points[i]);
-        }
-        for (int i = 1; i < 4; i++)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(nAR[i - 1], 0.05f);
-            Gizmos.DrawSphere(nBR[i - 1], 0.05f);
-            Gizmos.DrawSphere(nAL[i - 1], 0.05f);
-            Gizmos.DrawSphere(nBL[i - 1], 0.05f);
-        }
-        for (int i = 1; i < 4; i++)
-        {
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(nAR[i - 1], nBR[i - 1]);
-            Gizmos.DrawLine(nAL[i - 1], nBL[i - 1]);
-        }
-        for (int i = 1; i < 3; i++)
-        {
-            Gizmos.DrawLine(nAR[i], nBR[i - 1]);
-            Gizmos.DrawLine(nAL[i], nBL[i - 1]);
-        }*/
-        
         //точки эквидистант
         /*Gizmos.color = Color.blue;
         for (int i = 1; i < pointCoordinates.Length; i++)
@@ -411,13 +577,27 @@ public class RoadPoints : MonoBehaviour
         }*/
 
         //ЭКВИДИСТАНТЫ
-        Gizmos.color = Color.white;
-        for (int i = 1; i < pointCoordinates.Length; i++)
-        {
+        //Gizmos.color = Color.white;
+        //for (int i = 1; i < pointCoordinates.Length; i++)
+        //{
 
-            Gizmos.DrawLine(nAR[i - 1], nBR[i - 1]);//right
-            Gizmos.DrawLine(nAL[i - 1], nBL[i - 1]);//left
-        }
+        //    Gizmos.DrawLine(nARightEquidistantRoad[i - 1], nBRightEquidistantRoad[i - 1]);//right
+        //    Gizmos.DrawLine(nALeftEquidistantRoad[i - 1], nBLeftEquidistantRoad[i - 1]);//left
+        //}
+        //for (int i = 1; i < RoadMeshL.Length; i++)
+        //{
+
+        //    Gizmos.DrawLine(nARightEquidistantRoad[i - 1], nBRightEquidistantRoad[i - 1]);//right
+        //    Gizmos.DrawLine(nALeftEquidistantRoad[i - 1], nBLeftEquidistantRoad[i - 1]);//left
+        //}
+        //точки эквидистант
+        //Gizmos.color = Color.blue;
+        //for (int i = 1; i < RoadMeshL.Length; i++)
+        //{
+        //    //right
+        //    Gizmos.DrawSphere(RoadsideMeshR[i - 1], 0.05f);
+        //    Gizmos.DrawSphere(RoadsideMeshL[i - 1], 0.05f);
+        //}
 
         //прямые между кусками AiBi
         /*for (int i = 1; i < pointCoordinates.Length - 1; i++)
@@ -430,7 +610,7 @@ public class RoadPoints : MonoBehaviour
         /*Gizmos.color = Color.blue;
         for (int i = 1; i < pointCoordinates.Length; i++)
         {
-            
+
 
             //right
             Gizmos.DrawLine(nAR[i - 1], pointCoordinates[i - 1]);
@@ -441,22 +621,6 @@ public class RoadPoints : MonoBehaviour
             Gizmos.DrawLine(nBL[i - 1], pointCoordinates[i]);
 
         }*/
-
-        //проверка на расстрояние перпендикуляров
-        //Gizmos.color = Color.white;
-        //Gizmos.DrawSphere(nAL[10], 0.05f);
-        //Gizmos.DrawSphere(nBL[9], 0.05f);
-        //Gizmos.DrawSphere(pointCoordinates[10], 0.05f);
-        //Gizmos.DrawLine(nAL[10], pointCoordinates[10]);
-        //Gizmos.DrawLine(nBL[9], pointCoordinates[10]);
-        //Debug.Log("YesYes");
-        //Gizmos.color = Color.white;
-        //for (int i = 0; i < pointCoordinates.Length; i++)
-        //    {
-        //        Gizmos.DrawLine(RML[i], pointCoordinates[i]);//right
-
-        //    }
-
 
         //Точки середины между перпендикулярами
         /*Gizmos.color = Color.black;
@@ -471,7 +635,7 @@ public class RoadPoints : MonoBehaviour
             Gizmos.DrawSphere(RMR[i], 0.05f);
         }*/
 
-        //Gizmos.color = Color.red;
+        /*//Gizmos.color = Color.red;
         //for (int i = 1; i < RMR.Length; i++)
         //{
         //    Gizmos.DrawLine(RMR[i - 1], RMR[i]);
@@ -479,43 +643,81 @@ public class RoadPoints : MonoBehaviour
         //for (int i = 1; i < RML.Length; i++)
         //{
         //    Gizmos.DrawLine(RML[i - 1], RML[i]);
-        //}
+        //}*/
+    }
+
+    //private void PointMesh1()//подсчёт 
+    //{
+    //    var resultRoadLeft = CalcLeftRoadEquidistant(pointCoordinates, (float)3.5, (float)-0.2);//вычисление точек координат для левой линии дороги(проезжая часть)
+    //    nALeftEquidistantRoad = resultRoadLeft.Item1;
+    //    nBLeftEquidistantRoad = resultRoadLeft.Item2;
+
+    //    Debug.Log(pointCoordinates.Length);
+    //    Debug.Log(nALeftEquidistantRoad.Length);
+
+    //    var resultRoadRight = CalcRightRoadEquidistant(pointCoordinates, (float)3.5, (float)-0.2);
+    //    nARightEquidistantRoad = resultRoadRight.Item1;
+    //    nBRightEquidistantRoad = resultRoadRight.Item2;
+
+    //    RoadMeshL = MeshNearPoints(nALeftEquidistantRoad, nBLeftEquidistantRoad, nALeftEquidistantRoad.Length, pointCoordinates, (float)3.5);
+    //    RoadMeshR = MeshNearPoints(nARightEquidistantRoad, nBRightEquidistantRoad, nARightEquidistantRoad.Length, pointCoordinates, (float)3.5);
+
+    //}
+
+    private void PointMesh(Vector3[] RoadMeshLeft, Vector3[] RoadMeshRight, float high, float weight, int index)//0, 1, 
+    {
+        var resultSideLeft = CalcLeftRoadEquidistant(RoadMeshLeft, weight, high);
+        var resultSideRight = CalcRightRoadEquidistant(RoadMeshRight, weight, high);
+        Debug.Log("nALeftEquidistantRoadside");
+        nALeftEquidistantRoad = resultSideLeft.Item1;
+        nBLeftEquidistantRoad = resultSideLeft.Item2;
+
+        nARightEquidistantRoad = resultSideRight.Item1;
+        nBRightEquidistantRoad = resultSideRight.Item2; 
+
+        if(index == 0)
+        {      
+            RoadMeshL = MeshNearPoints(nALeftEquidistantRoad, nBLeftEquidistantRoad, nALeftEquidistantRoad.Length, RoadMeshLeft, weight);
+            RoadMeshR = MeshNearPoints(nARightEquidistantRoad, nBRightEquidistantRoad, nARightEquidistantRoad.Length, RoadMeshRight, weight);
+        }
+        else 
+            if(index == 1)
+        {        
+            RoadsideMeshL = MeshNearPoints(nALeftEquidistantRoad, nBLeftEquidistantRoad, nALeftEquidistantRoad.Length, RoadMeshLeft, weight);
+        }
+        else
+            if (index == 2)
+        {
+            RoadsideMeshR = MeshNearPoints(nARightEquidistantRoad, nBRightEquidistantRoad, nARightEquidistantRoad.Length, RoadMeshRight, weight);
+        }
+
+
+
     }
 
     private void Start()
     {
+        roadMeshes = new Mesh[5];
+        
+        //ROAD
         GetCoord();
-        //GetCoordTEST();
-        var resultLeft = CalcLeftEquidistant(pointCoordinates);
-        nAL = resultLeft.Item1;
-        nBL = resultLeft.Item2;
 
-        Debug.Log(pointCoordinates.Length);
-        Debug.Log(nAL.Length);
-
-        var resultRight = CalcRightEquidistant(pointCoordinates);
-        nAR = resultRight.Item1;
-        nBR = resultRight.Item2;
-
-        RML = MeshNearPoints(nAL, nBL, nAL.Length, pointCoordinates);
-        RMR = MeshNearPoints(nAR, nBR, nAR.Length, pointCoordinates);
-
-        MeshCreate();
-
-        //проверка на расстрояние от точек оси до меш
-        //for (int i = 1; i < pointCoordinates.Length; i++)
-        //{
-        //    Vector3 evecA = new Vector3(RML[i].x - pointCoordinates[i].x, RML[i].y - pointCoordinates[i].y, RML[i].z - pointCoordinates[i].z);
-        //    double eA = Math.Sqrt(Math.Pow((double)evecA.x, 2) + Math.Pow((double)evecA.y, 2) + Math.Pow((double)evecA.z, 2));
-
-        //    //Vector3 evecB = new Vector3(nBL[i-1].x - pointCoordinates[i].x, nBL[i-1].y - pointCoordinates[i].y, nBL[i-1].z - pointCoordinates[i].z);
-        //    //double eB = Math.Sqrt(Math.Pow((double)evecB.x, 2) + Math.Pow((double)evecB.y, 2) + Math.Pow((double)evecB.z, 2));
-
-        //    Debug.Log(eA);
-        //    //Debug.Log(eB);
-        //}
+        PointMesh(pointCoordinates, pointCoordinates, (float)-0.2, (float)3.5, 0);
+        roadMeshes[0] = RoadMeshCreate(0);
+        AssignMeshesToObjects(0);
 
 
         Debug.Log("Yes");
+
+        PointMesh(RoadMeshL, RoadMeshR, (float)-0.4, 2, 1);
+        roadMeshes[1] = RoadMeshCreate(1);
+        AssignMeshesToObjects(1);
+
+        PointMesh(RoadMeshL, RoadMeshR, (float)-0.4, 2, 2);
+        roadMeshes[2] = RoadMeshCreate(2);
+        AssignMeshesToObjects(2);
+
     }
+
+
 }
