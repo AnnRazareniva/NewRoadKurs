@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Ann\\MyNewRoad\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|c:\\users\\ann\\mynewroad\\assets\\roadpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|c:\\users\\ann\\mynewroad\\assets\\terrainmaker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|solutionrelative:assets\\terrainmaker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|C:\\Users\\Ann\\MyNewRoad\\assets\\roadpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|solutionrelative:assets\\roadpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|C:\\Users\\Ann\\MyNewRoad\\assets\\sideroad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|solutionrelative:assets\\sideroad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|C:\\Users\\Ann\\MyNewRoad\\assets\\newbehaviourscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDE0E64F-742D-9019-A1ED-E3659A0CAC7B}|Assembly-CSharp.csproj|solutionrelative:assets\\newbehaviourscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,25 +34,38 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SideRoad.cs",
-              "DocumentMoniker": "C:\\Users\\Ann\\MyNewRoad\\Assets\\SideRoad.cs",
-              "RelativeDocumentMoniker": "Assets\\SideRoad.cs",
-              "ToolTip": "C:\\Users\\Ann\\MyNewRoad\\Assets\\SideRoad.cs",
-              "RelativeToolTip": "Assets\\SideRoad.cs",
-              "ViewState": "AQIAAFUAAAAAAAAAAAAuwHAAAAALAAAA",
+              "DocumentIndex": 2,
+              "Title": "NewBehaviourScript.cs",
+              "DocumentMoniker": "C:\\Users\\Ann\\MyNewRoad\\Assets\\NewBehaviourScript.cs",
+              "RelativeDocumentMoniker": "Assets\\NewBehaviourScript.cs",
+              "ToolTip": "C:\\Users\\Ann\\MyNewRoad\\Assets\\NewBehaviourScript.cs",
+              "RelativeToolTip": "Assets\\NewBehaviourScript.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAgwD0AAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-11T09:48:12.217Z"
+              "WhenOpened": "2024-06-20T04:31:08.986Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "TerrainMaker.cs",
+              "DocumentMoniker": "C:\\Users\\Ann\\MyNewRoad\\Assets\\TerrainMaker.cs",
+              "RelativeDocumentMoniker": "Assets\\TerrainMaker.cs",
+              "ToolTip": "C:\\Users\\Ann\\MyNewRoad\\Assets\\TerrainMaker.cs",
+              "RelativeToolTip": "Assets\\TerrainMaker.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwB0AAAATAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-18T12:43:24.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "RoadPoints.cs",
               "DocumentMoniker": "C:\\Users\\Ann\\MyNewRoad\\Assets\\RoadPoints.cs",
               "RelativeDocumentMoniker": "Assets\\RoadPoints.cs",
               "ToolTip": "C:\\Users\\Ann\\MyNewRoad\\Assets\\RoadPoints.cs",
               "RelativeToolTip": "Assets\\RoadPoints.cs",
-              "ViewState": "AQIAACgBAAAAAAAAAAAAACgBAADUAAAA",
+              "ViewState": "AQIAACkAAAAAAAAAAAAQwBEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-05T08:09:14.504Z",
               "EditorCaption": ""

@@ -79,8 +79,8 @@
     <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Ports\ValueOutputWidget.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Framework\Variables\SetVariableOption.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Framework\Variables\Obsolete\IsVariableDefinedUnitOption.cs" />
-    <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Invocations\InvocationInspector.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Framework\Codebase\LiteralOption.cs" />
+    <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Invocations\InvocationInspector.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Options\UnitOptionProvider.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Ports\UnitInputPortWidget.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Flow\Plugin\Migrations\Migration_1_2_4_to_1_3_0.cs" />
@@ -915,13 +915,13 @@
       <Project>{7C903C79-A1AA-8EBB-5642-4A23211C55D2}</Project>
       <Name>Unity.VisualScripting.Flow</Name>
     </ProjectReference>
-    <ProjectReference Include="UnityEngine.TestRunner.csproj">
-      <Project>{09655559-4B29-FDE7-6798-4B67CA2CB78C}</Project>
-      <Name>UnityEngine.TestRunner</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
       <Project>{9213EF87-1F8D-BED0-038E-781E549FF7EF}</Project>
       <Name>UnityEditor.TestRunner</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.TestRunner.csproj">
+      <Project>{09655559-4B29-FDE7-6798-4B67CA2CB78C}</Project>
+      <Name>UnityEngine.TestRunner</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
