@@ -100406,7 +100406,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!154 &1131269977
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -100493,7 +100493,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39804f039b9260f498c1fa2516f9012f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain: {fileID: 0}
 --- !u!1 &1500985733
 GameObject:
   m_ObjectHideFlags: 0

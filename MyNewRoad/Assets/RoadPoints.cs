@@ -666,13 +666,13 @@ public class RoadPoints : MonoBehaviour
         //}
 
         ////ось дороги
-        //Gizmos.color = Color.white;
+        Gizmos.color = Color.white;
 
-        //for (int i = 1; i < pointCoordinates.Length; i++)
-        //{
+        for (int i = 1; i < pointCoordinates.Length; i++)
+        {
 
-        //    Gizmos.DrawLine(pointCoordinates[i - 1], pointCoordinates[i]);
-        //}
+            Gizmos.DrawLine(pointCoordinates[i - 1], pointCoordinates[i]);
+        }
 
         //точки эквидистант
         /*Gizmos.color = Color.blue;
@@ -690,7 +690,7 @@ public class RoadPoints : MonoBehaviour
 
         }*/
 
-        //ЭКВИДИСТАНТЫ
+        ////ЭКВИДИСТАНТЫ
         //Gizmos.color = Color.white;
         //for (int i = 1; i < pointCoordinates.Length; i++)
         //{
@@ -705,8 +705,8 @@ public class RoadPoints : MonoBehaviour
         //    Gizmos.DrawLine(nALeftEquidistantRoad[i - 1], nBLeftEquidistantRoad[i - 1]);//left
         //}
 
-        //точки эквидистант
-        //Gizmos.color = Color.green;
+        ////точки эквидистант
+        //Gizmos.color = Color.black;
         //for (int i = 1; i < RoadSlopeMeshL.Length; i++)
         //{
         //    //right
@@ -870,7 +870,7 @@ public class RoadPoints : MonoBehaviour
         roadMeshes[7] = RoadMeshCreate(7);
         AssignMeshesToObjects(7);
 
-        PointMesh(RoadSlopeMeshL, RoadSlopeMeshR, (float)0.4, (float)1.5, 8);//подъём правая
+        PointMesh(RoadSlopeMeshL, RoadSlopeMeshR, (float)0.4, (float)Math.Sqrt(Math.Pow(0.4, 2) + Math.Pow(0.6, 2)), 8);//подъём правая
         roadMeshes[8] = RoadMeshCreate(8);
         AssignMeshesToObjects(8);
 
